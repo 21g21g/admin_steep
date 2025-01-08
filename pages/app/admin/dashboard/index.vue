@@ -1,5 +1,4 @@
 <script setup>
-
 definePageMeta({
     layout:"admin"
 })
@@ -7,6 +6,6 @@ definePageMeta({
 
 <template>
     <div>
-    <h1>address page</h1>
+    <h1>dashboard page</h1>
     </div>
 </template>

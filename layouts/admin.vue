@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, watch, inject } from "vue";
+import { ref, computed, onMounted, watch, } from "vue";
 import hahu from "../assets/hahu.png"
 import { useDark, useToggle } from "@vueuse/core";
 import { useClipboard, useWindowSize } from "@vueuse/core";
@@ -30,39 +30,48 @@ const router = useRouter();
 
 const currentPage = ref("/app/dashboard");
 
-
-
+const showNotificationList = ref(false);
+const showLogoutConfirmationModal = ref(false);
+/* ----------------------------- Dashboard Mode ----------------------------- */
+const sidebarOpen = ref(false);
+const notificationsCount=ref(10)
+const mini = ref(true); //set from session
 const navigation = [
   {
     id:1,
     name: "Dashboard",
-    href: "/app/dashboard",
+    href: "/app/admin/",
     title: "Dashboard",
+    iconName:"material-symbols:dashboard",
     current: true,
   },
   {
     id:2,
     name: "Address",
-    href: "/app/address",
+    href: "/app/admin/address",
     title: "Address",
+    iconName:"ic:round-place",
   },
   {
     id:3,
     name: "Intervantion",
-    href: "/app/intervantions",
+    href: "/app/admin/intervantions",
     title: "Intervantion",
+    iconName:"heroicons-outline:adjustments",
   },
   {
     id:4,
     name: "Support",
-    href: "/app/support",
+    href: "/app/admin/support",
     title: "Support",
+    iconName:"material-symbols-light:contact-support",
   },
   {
     id:5,
     name: "Users",
-    href: "/app/users",
+    href: "/app/admin/users",
     title: "Users",
+    iconName:"fa6-solid:users",
   },
 ];
 const userNavigation = [
@@ -105,14 +114,11 @@ const handleBlur = () => {
 // document.addEventListener("blur", handleBlur);
 
 
-/* ----------------------------- Dashboard Mode ----------------------------- */
-const sidebarOpen = ref(false);
 
-const mini = ref(false); //set from session
 if (true) {
-  mini.value = true;
-} else if (false) {
   mini.value = false;
+} else if (false) {
+  mini.value = true;
 } else {
   mini.value = width.value < 1536;
 }
@@ -129,16 +135,15 @@ function logout() {
 }
 
 
-const showNotificationList = ref(false);
-const showLogoutConfirmationModal = ref(false);
+
 </script>
 <template>
   <div class="min-h-screen relative">
     <!-- /* ------------------------ Logout confirmation modal ----------------------- */ -->
     <h-confirm v-model="showLogoutConfirmationModal">
       <template #mainIcon>
-        <div class="bg-red-200 p-2 rounded-full">
-        <h1>geb</h1>
+        <div class="bg-red-200 px-2 py-1 rounded-full">
+          <Icon name="ci:triangle-warning" class="w-8 h-8 text-red-600"/>
         </div>
       </template>
       <template #title>
@@ -152,7 +157,7 @@ const showLogoutConfirmationModal = ref(false);
       <template #falseButton>
         <button
           @click="showLogoutConfirmationModal = false"
-          class="outline-button !px-8"
+          class="outline-button border rounded-sm !px-5"
         >
           No
         </button>
@@ -160,7 +165,7 @@ const showLogoutConfirmationModal = ref(false);
       <template #trueButton>
         <button
           @click="logout()"
-          class="outline-button bg-red-700 !border-red-700 text-white"
+          class="outline-button bg-red-700 !border-red-700 px-3 rounded-sm text-white"
         >
           Log Out
         </button>
@@ -185,7 +190,7 @@ const showLogoutConfirmationModal = ref(false);
           <div
             class="fixed inset-0 bg-gray-600 dark:bg-secondary-dark-2 bg-opacity-75"
           >
-          hhhh
+        
           </div>
         </TransitionChild>
 
@@ -200,7 +205,7 @@ const showLogoutConfirmationModal = ref(false);
             leave-to="-translate-x-full"
           >
             <DialogPanel
-              class="relative flex w-full flex-1 flex-col bg-secondary-dark-2 pt-5 md:pb-4"
+              class="relative flex w-full flex-1 flex-col bg-[#172554] pt-5 md:pb-4"
             >
               <TransitionChild
                 as="template"
@@ -218,27 +223,23 @@ const showLogoutConfirmationModal = ref(false);
                     @click="sidebarOpen = false"
                   >
                     <span class="sr-only">Close sidebar</span>
-                    <!-- <XMarkIcon class="h-6 w-6 text-white" aria-hidden="true" /> -->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="text-white" viewBox="0 0 512 512"><path fill="currentColor" fill-rule="evenodd" d="M420.48 121.813L390.187 91.52L256 225.92L121.813 91.52L91.52 121.813L225.92 256L91.52 390.187l30.293 30.293L256 286.08l134.187 134.4l30.293-30.293L286.08 256z"/></svg>
+                    <Icon name="material-symbols:close" class="text-white w-10 h-6"/>
                   </button>
                 </div>
               </TransitionChild>
               <!-- /* ----------------------- Static sidebar for mobile ----------------------- */ -->
               <nuxt-link
                 to="/app/"
-                class="flex-shrink-0 my-8 z-50 flex-cols mx-auto space-y-1"
+                class="flex-shrink-0 my-8 z-50 flex-col mx-auto space-y-1"
               >
-                <img
-                  class="h-8 w-auto mx-auto"
-                  :src="hahu"
-                  alt="HaHuJobs Logo"
-                />
-                <p class="text-secondary-6 text-sm">Primary</p>
+              <Icon name="ph:fediverse-logo-light" class="w-12 h-12 text-primary"/>
+
+                <!-- <p class="text-secondary-6 text-sm">Primary</p> -->
               </nuxt-link>
               <div
-                class="mt-2 w-full h-full flex flex-col justify-between  overflow-y-auto"
+                class="mt-2 w-full h-full flex flex-col justify-between   overflow-y-auto"
               >
-                <nav class="space-y-6 px-5">
+                <nav class="flex flex-col space-y-6 px-5">
                  <nuxt-link
               v-for="item in navigation"
               :key="item.name"
@@ -248,7 +249,7 @@ const showLogoutConfirmationModal = ref(false);
                 currentPage === item.name
                   ? 'bg-gray-900 text-white'
                   : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                  'rounded-md px-3 py-2 text-sm font-medium',
+                  'rounded-md px-3 py-2 text-sm font-bold',
               ]"
               :aria-current="currentPage === item.name ? 'page' : undefined"
             >
@@ -257,7 +258,7 @@ const showLogoutConfirmationModal = ref(false);
                 </nav>
                 <button
                   @click="showLogoutConfirmationModal = true"
-                  class="w-full bg-secondary-6 dark:bg-hahu-gray text-white dark:text-secondary-7 flex items-center px-8 py-4 text-lg font-medium"
+                  class="w-full bg-neutral-950 dark:bg-hahu-gray text-white dark:text-secondary-7 flex items-center px-8 py-4 text-lg font-medium"
                 >
                  
                   <nuxt-icon name="logout" filled class="h-6 w-6 mr-4" />
@@ -271,35 +272,32 @@ const showLogoutConfirmationModal = ref(false);
       </Dialog>
     </TransitionRoot>
 
-    <!-- /* -------------------------------------------------------------------------- */ -->
     <!-- /*                         Static sidebar for DESKTOP                         */ -->
-    <!-- /* -------------------------------------------------------------------------- */ -->
     <div
-      class="hidden lg:fixed mt-16 lg:inset-y-0 lg:flex lg:flex-col navAnimation"
-      :class="mini ? 'w-20' : 'md:w-48'"
+      class="hidden lg:fixed mt-16 lg:inset-y-0 lg:flex lg:flex-col "
+      :class="mini ? 'w-20' : 'md:w-60'"
     >
       <!-- Sidebar component, swap this element with another sidebar if you like -->
       <div
-        class="relative flex min-h-0 flex-1 flex-col items-center  bg-neutral-950"
+        class="relative flex min-h-0 flex-1 flex-col items-center  bg-[#172554]"
       >
         <!-- HaHu Logo -->
         <nuxt-link
           to="/app/"
-          class="h-16 mt-8 flex-shrink-0 flex-cols items-center mx-auto space-y-3"
+          class="h-16 mt-16 flex-shrink-0 flex-cols items-center mx-auto space-y-3"
         >
          
           <div
          
-          class=" bg-gray-500 hover:bg-primary-2  border flex w-12 aspect-square items-center justify-center rounded-full"
+          class=" bg-gray-500 hover:bg-primary-2   flex w-12 aspect-square ml-2 items-center justify-center rounded-full"
         >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"   
-       viewBox="0 0 24 24"><path fill="currentColor" d="M12 12.75c3.942 0 7.987 2.563 8.249 7.712a.75.75 0 0 1-.71.787c-2.08.106-11.713.171-15.077 0a.75.75 0 0 1-.711-.787C4.013 15.314 8.058 12.75 12 12.75m0-9a3.75 3.75 0 1 0 0 7.5a3.75 3.75 0 0 0 0-7.5"/></svg>             
-             
+                   
+             <Icon name="material-symbols-light:person-check-rounded" size="30"/>
             
         </div>
           
           <p
-            class="text-primary -3 dark:text-secondary-6"
+            class="text-primary -3 dark:text-secondary-6 font-medium"
             :class="mini ? 'text-xs' : 'text-sm'"
           >
             Administrator
@@ -308,10 +306,10 @@ const showLogoutConfirmationModal = ref(false);
         <!-- Toggle mini mode -->
         <div
           @click="minify"
-          class="group bg-primary hover:bg-primary-2 absolute border z-10 top-[200PX] -right-[14px] flex w-7 aspect-square items-center justify-center rounded-full cursor-pointer"
+          class="group bg-primary hover:bg-primary-2 absolute  border z-10 top-[240PX] -right-[14px] flex  aspect-square items-center justify-center rounded-full cursor-pointer"
         >
-          <button class="shadow-none border-none">
-            <svg xmlns="http://www.w3.org/2000/svg" :class="mini ? 'rotate-180' : ''" width="12" height="24" viewBox="0 0 12 24"><path fill="currentColor" fill-rule="evenodd" d="m3.343 12l7.071 7.071L9 20.485l-7.778-7.778a1 1 0 0 1 0-1.414L9 3.515l1.414 1.414z"/></svg>
+          <button class="shadow-none border-none ">
+            <Icon name="ic:sharp-keyboard-arrow-left" class="w-8 h-5 mt-1 text-white" :class="mini ? 'rotate-180' : ''"/>
              
              
             
@@ -324,7 +322,7 @@ const showLogoutConfirmationModal = ref(false);
         >
         </div>
 
-        <div class="flex flex-col justify-between h-full mt-10 pb-14">
+        <div class="flex flex-col justify-between items-center h-full mt-12 pb-14">
           <nav class="flex-1 space-y-5 px-2 py-4">
             <nuxt-link
                 v-for="item in navigation"
@@ -332,47 +330,42 @@ const showLogoutConfirmationModal = ref(false);
               :to="item.href"
               @click="handleclick(item.name)"
               
-              class="text-gray-300  hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+              class="text-gray-300  hover:text-white rounded-md px-3 py-2 text-sm lg:text-lg font-bold"
            
             >
               <!-- Mini version -->
               <span
-                :title="item.name"
+                title="item.name"
                 v-if="mini"
                 class="flex items-center justify-center h-8 w-8"
              
                 aria-hidden="true"
               >
+              <Icon :name="item.iconName"/>
               </span>
 
-              <!-- Full Version -->
-              <!-- :class="[
-                item.pageName == currentPage
-                  ? 'text-white dark:text-secondary-11'
-                  : 'text-white dark:text-secondary-11 group-hover:text-white dark:group-hover:text-secondary-11',
-                'mr-6 flex-shrink-0 h-7 w-7 ',
-              ]" -->
-              <span v-else class="flex items-center gap-x-3"  :class="[
+             
+              <span v-else class="flex items-center gap-x-3   hover:border-primary   px-6"  :class="[
                 currentPage === item.name
                   ? 'text-white  border-l-[4px] border-primary pl-1'
-                  : 'text-white',
+                  : 'text-white pl-1 hover:bg-[#7A7A7A] bg-transparent border-transparent  border-l-[4px]',
               ]">
-                {{ item.name }}
+               <Icon :name="item.iconName"/> {{ item.name }}
               </span>
             </nuxt-link>
           </nav>
-          <div class="flex justify-center">
+          <div class="flex justify-center w-full">
             <button
             title="Log out"
             @click="showLogoutConfirmationModal = true"
-            class=" bg-secondary-6 dark:bg-hahu-gray text-secondary-8 flex items-center gap-x-3 px-6 py-2 rounded-xl   text-base text-white bg-slate-700 "
-            :class="mini ? 'justify-center' : ''"
+            class="dark:bg-hahu-gray flex items-center px-16 py-2 rounded-lg   text-base text-white bg-slate-900 "
+            :class="mini ? 'justify-center px-7' : ''"
           >
-            <nuxt-icon name="logout" 
-              :class="mini ? 'w-5' : 'w-7'"
+            <Icon v-if="mini" name="si:sign-out-alt-fill" 
+              class="w-5"
               aria-hidden="true"
             />
-            <p v-if="!mini">Log Out</p>
+            <p v-if="!mini">Logout</p>
           </button>
           </div>
         
@@ -384,7 +377,8 @@ const showLogoutConfirmationModal = ref(false);
      
     >
       <div
-        class="fixed top-0 z-10 w-full flex h-16 flex-shrink-0 bg-amber-100 dark:bg-primary-dark shadow-lg"
+        class="fixed top-0 z-10 w-full flex h-20 flex-shrink-0 
+       bg-[rgb(233,209,158)] dark:bg-primary-dark shadow-lg"
       >
         <button
           type="button"
@@ -392,57 +386,43 @@ const showLogoutConfirmationModal = ref(false);
           @click="sidebarOpen = true"
         >
           <span class="sr-only">Open sidebar</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="text-black" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="square" stroke-linejoin="round" stroke-width="44" d="M102 256h308m-308-80h308M102 336h308"/></svg>      
+          <Icon name="uim:bars" class="text-black h-5 "/>
              
         </button>
         <div
-          class="flex flex-1 justify-between px-4 items-center text-center dark:text-secondary-11"
+          class="flex flex-1 justify-between px-4 items-center text-center dark:text-secondary-11 "
         >
           <div
-            class="text-lg md:text-2xl lg:ml-3 3xl:ml-5 flex items-center gap-x-3"
+            class="md:text-xl lg:ml-3 3xl:ml-5 flex flex-row items-center py-2"
           >
-            <!-- <component :is="pageIcon" class="w-6"></component> -->
-            <p>Geb</p>
+          <Icon name="ph:fediverse-logo-light" class="w-12 h-12 text-primary"/>
+          <div class="flex flex-col -space-y-2">
+            <p class="font-bold">THE BRIDGES</p>
+            <p class="text-secondary ">PROGRAMME</p></div>
+            
           </div>
           <div class="ml-4 flex items-center md:ml-6">
           
             <div class="flex items-center space-x-4 md:mr-5">
-              <div class="flex items-center">
-                <button
-                
-                  title="Toggle dark and light mode"
-                >
-                <!-- <nuxt-link name="notification"/> -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M13 3a1 1 0 1 0-2 0v.75h-.557A4.214 4.214 0 0 0 6.237 7.7l-.221 3.534a7.4 7.4 0 0 1-1.308 3.754a1.617 1.617 0 0 0 1.135 2.529l3.407.408V19a2.75 2.75 0 1 0 5.5 0v-1.075l3.407-.409a1.617 1.617 0 0 0 1.135-2.528a7.4 7.4 0 0 1-1.308-3.754l-.221-3.533a4.214 4.214 0 0 0-4.206-3.951H13zm-2.557 2.25a2.714 2.714 0 0 0-2.709 2.544l-.22 3.534a8.9 8.9 0 0 1-1.574 4.516a.117.117 0 0 0 .082.183l3.737.449c1.489.178 2.993.178 4.482 0l3.737-.449a.117.117 0 0 0 .082-.183a8.9 8.9 0 0 1-1.573-4.516l-.221-3.534a2.714 2.714 0 0 0-2.709-2.544zm1.557 15c-.69 0-1.25-.56-1.25-1.25v-.75h2.5V19c0 .69-.56 1.25-1.25 1.25" clip-rule="evenodd"/></svg>
-                 
-                </button>
-               
-              </div>
-              <!-- <div class="flex items-center text-primary"> -->
-                <!-- <button @click="showTour()" title="Show Tour">
-                  <InformationCircleIcon class="w-5 lg:w-6 stroke-2" />
-                </button> -->
-                <!-- <h3>hds</h3> -->
-              <!-- </div> -->
-              <!-- <button
+           
+              <button
                 id="notification-button"
                 type="button"
                 title="Notifications"
                 @click="showNotificationList = true"
-                class="relative rounded-full bg-white dark:bg-primary-dark dark:text-secondary-11 p-1 text-gray-400 hover:text-gray-500 focus:outline-none"
+                class="relative rounded-full dark:bg-primary-dark dark:text-secondary-11 p-1 text-gray-400 hover:text-gray-500 focus:outline-none"
               >
                 <span class="sr-only">View notifications</span>
-                <BellIcon
-                  class="w-5 lg:w-6 text-primary stroke-2"
-                  aria-hidden="true"
-                />
+              
+                <Icon name="material-symbols:notifications-outline-sharp" class="w-8 h-8"/>
+
                 <div
                   v-if="notificationsCount > 0"
                   class="absolute index-50 w-6 text-[11px] md:h-6 h-5 -top-2 -right-2 bg-red-600 flex items-center justify-center text-white text-center rounded-full"
                 >
-                  {{ roundNumber(notificationsCount) }}
+                  {{ notificationsCount }}
                 </div>
-              </button> -->
+              </button>
 
               <!-- Profile dropdown -->
               <Menu as="div" class="relative ml-3">
@@ -457,10 +437,10 @@ const showLogoutConfirmationModal = ref(false);
          
                  class=" bg-primary border z-10  flex w-5 h-5 aspect-square items-center rounded-full py-1"
                  >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12.75c3.942 0 7.987 2.563 8.249 7.712a.75.75 0 0 1-.71.787c-2.08.106-11.713.171-15.077 0a.75.75 0 0 1-.711-.787C4.013 15.314 8.058 12.75 12 12.75m0-9a3.75 3.75 0 1 0 0 7.5a3.75 3.75 0 0 0 0-7.5"/></svg>
+                 <Icon name="material-symbols:person" class="px-2"/>
 
                 </div>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9l6 6l6-6"/></svg>
+                <Icon name="ic:baseline-keyboard-arrow-down" class="w-5 h-5"/>
 
 
 
@@ -500,11 +480,11 @@ const showLogoutConfirmationModal = ref(false);
         </div>
       </div>
 
-      <main
-        class="h-screen overflow-y-auto pt-4 dark:bg-primary-dark 5xl:max-w-[1920px] !ml-0"
-      >
-      <NuxtPage/>
-      </main>
+  
+<main :class="mini ? 'lg:ml-24 ' : 'ml-4 md:ml-8 lg:ml-64'"
+                class="h-screen overflow-y-auto pt-4 mt-24  dark:bg-primary-dark 5xl:max-w-[1920px] ">
+                <slot />
+            </main>
     </div>
   </div>
 </template>

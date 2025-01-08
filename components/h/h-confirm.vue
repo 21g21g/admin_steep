@@ -6,7 +6,6 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-// import { XMarkIcon } from "@heroicons/vue/24/outline";
 const props = defineProps({
   modelValue: {
     type: Boolean,
