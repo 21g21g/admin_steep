@@ -27,9 +27,10 @@ const toggleDark = useToggle(isDark);
 
 const route = useRoute();
 const router = useRouter();
+const currentPage = ref("Dashboard");
+console.log(route.path)
 
-const currentPage = ref("/app/dashboard");
-
+const isFocused = ref(false);
 const showNotificationList = ref(false);
 const showLogoutConfirmationModal = ref(false);
 /* ----------------------------- Dashboard Mode ----------------------------- */
@@ -54,17 +55,17 @@ const navigation = [
   },
   {
     id:3,
-    name: "Intervantion",
-    href: "/app/admin/intervantions",
-    title: "Intervantion",
-    iconName:"heroicons-outline:adjustments",
+    name: "Interventions",
+    href: "/app/admin/interventions",
+    title: "Interventions",
+    iconName:"bi:printer-fill",
   },
   {
     id:4,
     name: "Support",
     href: "/app/admin/support",
     title: "Support",
-    iconName:"material-symbols-light:contact-support",
+    iconName:"arcticons:rakuten-link-supporter",
   },
   {
     id:5,
@@ -93,9 +94,22 @@ const handleclick = (value) => {
   currentPage.value = value;
 };
 
-
-
-const isFocused = ref(false);
+watch(
+      () => route.path,
+      (newPath) => {
+        if (newPath === "/app/admin/") {
+          currentPage.value = "Dashboard";
+        } else if (newPath === "/app/admin/address") {
+          currentPage.value = "Address";
+        } else if (newPath === "/app/admin/interventions") {
+          currentPage.value = "Interventions";
+        } else if (newPath === "/app/admin/support") {
+          currentPage.value = "Support";
+        } else {
+          currentPage.value = "Users";  
+        }
+      }
+    );
 
 watch(
   () => isFocused.value,
@@ -205,7 +219,7 @@ function logout() {
             leave-to="-translate-x-full"
           >
             <DialogPanel
-              class="relative flex w-full flex-1 flex-col bg-[#172554] pt-5 md:pb-4"
+              class="relative flex w-full flex-1 flex-col bg-[#444f60] pt-5 md:pb-4"
             >
               <TransitionChild
                 as="template"
@@ -279,7 +293,7 @@ function logout() {
     >
       <!-- Sidebar component, swap this element with another sidebar if you like -->
       <div
-        class="relative flex min-h-0 flex-1 flex-col items-center  bg-[#172554]"
+        class="relative flex min-h-0 flex-1 flex-col items-center  bg-[#444f60]"
       >
         <!-- HaHu Logo -->
         <nuxt-link
@@ -289,15 +303,15 @@ function logout() {
          
           <div
          
-          class=" bg-gray-500 hover:bg-primary-2   flex w-12 aspect-square ml-2 items-center justify-center rounded-full"
+          class=" bg-gray-300 hover:bg-primary-2   flex w-12 aspect-square ml-2 items-center justify-center rounded-full"
         >
                    
-             <Icon name="material-symbols-light:person-check-rounded" size="30"/>
+             <Icon name="material-symbols-light:person-check-rounded" size="30" class="text-primary"/>
             
         </div>
           
           <p
-            class="text-primary -3 dark:text-secondary-6 font-medium"
+            class="text-white dark:text-secondary-6 font-medium"
             :class="mini ? 'text-xs' : 'text-sm'"
           >
             Administrator
@@ -348,7 +362,7 @@ function logout() {
               <span v-else class="flex items-center gap-x-3   hover:border-primary   px-6"  :class="[
                 currentPage === item.name
                   ? 'text-white  border-l-[4px] border-primary pl-1'
-                  : 'text-white pl-1 hover:bg-[#7A7A7A] bg-transparent border-transparent  border-l-[4px]',
+                  : 'text-white pl-1 hover:bg-[#697280] bg-transparent border-transparent  border-l-[4px]',
               ]">
                <Icon :name="item.iconName"/> {{ item.name }}
               </span>
@@ -358,7 +372,7 @@ function logout() {
             <button
             title="Log out"
             @click="showLogoutConfirmationModal = true"
-            class="dark:bg-hahu-gray flex items-center px-16 py-2 rounded-lg   text-base text-white bg-slate-900 "
+            class="dark:bg-hahu-gray flex items-center px-16 py-2 rounded-lg   text-base text-white bg-[#697280] "
             :class="mini ? 'justify-center px-7' : ''"
           >
             <Icon v-if="mini" name="si:sign-out-alt-fill" 
@@ -378,7 +392,7 @@ function logout() {
     >
       <div
         class="fixed top-0 z-10 w-full flex h-20 flex-shrink-0 
-       bg-[rgb(233,209,158)] dark:bg-primary-dark shadow-lg"
+       bg-white dark:bg-primary-dark shadow-lg"
       >
         <button
           type="button"
@@ -414,7 +428,7 @@ function logout() {
               >
                 <span class="sr-only">View notifications</span>
               
-                <Icon name="material-symbols:notifications-outline-sharp" class="w-8 h-8"/>
+                <Icon name="material-symbols:notifications-outline-sharp" class="w-8 h-8 bg-primary"/>
 
                 <div
                   v-if="notificationsCount > 0"
@@ -481,7 +495,7 @@ function logout() {
       </div>
 
   
-<main :class="mini ? 'lg:ml-24 ' : 'ml-4 md:ml-8 lg:ml-64'"
+       <main :class="mini ? 'lg:ml-24 ' : 'ml-4 md:ml-8 lg:ml-64'"
                 class="h-screen overflow-y-auto pt-4 mt-24  dark:bg-primary-dark 5xl:max-w-[1920px] ">
                 <slot />
             </main>
