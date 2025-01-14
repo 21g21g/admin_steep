@@ -28,15 +28,7 @@ const props = defineProps({
 });
 
 
-onMounted(() => {
-    console.log("kkkk");
 
-    props.sort.forEach((item) => {
-        _sort.value = { ..._sort.value, ...item };
-    });
-    console.log("kkkk", _sort);
-
-});
 
 
 // Function to toggle delete button visibility
@@ -57,7 +49,6 @@ props.items.forEach(item => {
 
 
 function sort_by(header) {
-    console.log("sort yyyyyyyyyyyyyyyyyyyyyy", _sort.value);
     if (header.sortable === false) return;
 
     let direction = _sort.value[header.value];
@@ -106,32 +97,38 @@ const cancelDelete = () => {
     isDeleteConfirmationVisible.value = false;
     itemToDelete.value = null;
 };
+onMounted(() => {
+    console.log("kkkk");
+
+    props.sort.forEach((item) => {
+        _sort.value = { ..._sort.value, ...item };
+    });
+    console.log("kkkk", _sort);
+
+});
 </script>
+
 <template>
     <!-- Table component -->
     <div>
-        <div :class="supporterClass" class="rounded-lg relative border">
+        <div :class="supporterClass" class="rounded-lg relative border mt-3">
             <table class="w-full divide-y divide-secondary-4 dark:divide-hahu-gray font-body">
                 <thead class="bg-white dark:bg-secondary-dark-2 top-0">
                     <tr>
                         <!-- Table headers -->
                         <th v-for="(header, i) in headers" :key="i" :class="rowHeadStyle"
-                            class="text-xs align-middle 2xl:text-[1.2rem] font-medium text-black xl:text-sm lg:text-xs sm:text-xs px-4 2xl:px-12 py-3 text-left border-2 border-gray-200">
-                            {{ header.text }}
-                            <span class="cursor-pointer  " @click="sort_by(header)">
-
-                                <span class="ml-2 " v-if="header.sortable !== false">
-
-
-                                    <Icon name="bi:sort-up" v-if="
-                                        _sort[header.value] === 'asc'
-                                    " class=" text-primary w-4 h-3  " />
-                                    <Icon name="bi:sort-down" v-else class=" text-primary w-4 h-3" />
+                            class="text-xs 2xl:text-[1rem] xl:text-sm lg:text-xs sm:text-xs align-middle font-light text-black px-2 2xl:px-6 py-2 text-left border-2 border-gray-200 bg-white whitespace-nowrap">
+                            <div class="flex items-center ">
+                                <span>{{ header.text }}</span>
+                                <span v-if="header.sortable !== false" class="cursor-pointer flex items-center ml-2"
+                                    @click="sort_by(header)">
+                                    <Icon name="bi:sort-up" v-if="_sort[header.value] === 'asc'"
+                                        class="text-primary w-3 h-3 " />
+                                    <Icon name="bi:sort-down" v-else class="text-primary w-3 h-3  " />
                                 </span>
-
-
-                             </span>
+                            </div>
                         </th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -147,9 +144,9 @@ const cancelDelete = () => {
                             </span>
                             <span v-else class="align-middle px-3 2xl:px-12 relative ">
                                 <!-- Show a three-dot icon for the Actions column -->
-                                <Icon :name="'fa-ellipsis-v'" @click="toggleDelete(item)"  class="w-3 h-3"/>
+                                <Icon :name="'fa-ellipsis-v'" @click="toggleDelete(item)" />
                                 <!-- Conditionally show the delete button if showDelete is true -->
-                                <div v-if="item.showDelete" class="absolute z-50 right-2 bottom-6">
+                                <div v-if="item.showDelete" class="absolute z-50 right-2 bottom-6 ">
                                     <button @click="showDeleteConfirmation(item)"
                                         class="absolute -top-2 shadow-xl left-8 transform -translate-x-1/2 px-6 py-2 flex items-center text-red-600 border-2 border-gray-200 rounded-lg translate-y-2 hover:bg-secondary transition-all w-auto">
                                         <Icon name="material-symbols:delete" />
@@ -162,12 +159,11 @@ const cancelDelete = () => {
                     </tr>
                 </tbody>
             </table>
-        </div>
+         </div>
 
-        <!-- Delete confirmation modal -->
-
-        <h-confirm v-model="isDeleteConfirmationVisible">
-            <template #mainIcon>
+           <!-- Delete confirmation modal -->
+            <h-confirm v-model="isDeleteConfirmationVisible">
+             <template #mainIcon>
                 <div class=" flex  ">
                     <Icon name="line-md:account-delete" class="w-12 h-12 text-red-600 " />
                 </div>

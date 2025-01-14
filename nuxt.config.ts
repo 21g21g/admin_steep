@@ -10,8 +10,9 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
     'nuxt-icons',
     '@nuxt/icon',
-    '@nuxtjs/google-fonts'
+    '@nuxtjs/google-fonts',
   ],
+ 
   googleFonts:{
     families:{
       Roboto:[400,700]

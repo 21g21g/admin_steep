@@ -36,6 +36,11 @@ const props = defineProps({
     default: () => "",
     required: false,
   },
+  inputClass: {
+    type: String,
+    default: () => "",
+    required: false,
+  },
   hideDetail: {
     type: Boolean,
     default: false,
@@ -53,6 +58,10 @@ const props = defineProps({
   },
   leadingIconClass: {
     type: [String],
+  },
+  trailingIconClass:{
+    type:String
+
   },
   min: String,
   max: String,
@@ -161,13 +170,14 @@ const clear = () => {
         :min="min"
         :max="max"
         :type="type"
+        
         :name="props.name"
         step="any"
         :id="id"
-        :class="[
+        :class="[ 
           errorMessage
-            ? 'border-red-500 border hover:border-red-500 focus:border-red-500 focus:ring-red-500'
-            : 'border-[1px]  border-gray-300 group-hover:border-gray-500 focus:border-gray-600 focus:ring-gray-600 disabled:bg-gray-100 disabled:cursor-not-allowed',
+            ? 'border-red-500 w-full py-3 mt-4 border rounded-md hover:border-red-500 focus:border-red-500 focus:ring-red-500'
+            : inputClass,
           props.iconLeadingClass ? props.iconLeadingClass : '',
           props.leadingIcon ? 'pl-10' : '',
           props.class ? props.class : '',
@@ -177,14 +187,14 @@ const clear = () => {
           props.trailingIcon ? 'pr-7' : '',
           props.type == 'password' ? 'pr-7' : '',
         ]"
-        class="block w-80 text-base text-gray-800 dark:bg-gray-700 dark:text-gray-300 placeholder-gray-300 dark:placeholder-secondary p-1 transition-all duration-300 rounded-md font-body focus:outline-none"
+        
         :placeholder="props.placeholder"
         aria-invalid="true"
         aria-describedby="email-error"
         :disabled="props.disabled"
       />
       <div
-        v-if="inputValue"
+        v-if="inputValue && props.type!='password'"
         class="absolute inset-y-0 right-0 flex items-center pr-3 hover:cursor-pointer"
         @click="clear()"
       >
@@ -198,7 +208,7 @@ const clear = () => {
       >
         <Icon
           v-if="type === 'password'"
-          class="w-5 h-5 text-gray-300"
+          class="w-5 h-5 text-gray-300 mt-4"
           name="mdi:eye"
           size="25"
         ></Icon>
@@ -211,7 +221,7 @@ const clear = () => {
       </div>
       <div
         v-else-if="props.trailingIcon"
-        class="absolute inset-y-0 md:right-[62rem] flex items-center pr-3 hover:cursor-pointer"
+        :class="trailingIconClass"
       >
         <Icon
           class="text-black dark:text-black"

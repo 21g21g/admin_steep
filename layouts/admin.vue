@@ -1,9 +1,8 @@
 <script setup>
-import { ref, computed, onMounted, watch, } from "vue";
-import hahu from "../assets/hahu.png"
-import { useDark, useToggle } from "@vueuse/core";
-import { useClipboard, useWindowSize } from "@vueuse/core";
+import { ref, onMounted, watch, } from "vue";
+import { useWindowSize } from "@vueuse/core";
 import { useRoute, useRouter } from "vue-router";
+import { useForm } from 'vee-validate';
 
 import {
   Dialog,
@@ -19,24 +18,28 @@ import {
 
 
 const { width } = useWindowSize();
+const { handleSubmit } = useForm();
 
 
-const isDark = useDark();
-
-const toggleDark = useToggle(isDark);
 
 const route = useRoute();
 const router = useRouter();
-const currentPage = ref("Dashboard");
+const currentPage = ref("");
 console.log(route.path)
 
 const isFocused = ref(false);
 const showNotificationList = ref(false);
 const showLogoutConfirmationModal = ref(false);
 /* ----------------------------- Dashboard Mode ----------------------------- */
+const isModalOpen = ref(false);
 const sidebarOpen = ref(false);
 const notificationsCount=ref(10)
-const mini = ref(true); //set from session
+const mini = ref(true); 
+const currentPassword=ref("")
+const newPassword=ref("")
+const confirmPassword=ref("")
+
+//sidebar routes and pages setup
 const navigation = [
   {
     id:1,
@@ -58,7 +61,7 @@ const navigation = [
     name: "Interventions",
     href: "/app/admin/interventions",
     title: "Interventions",
-    iconName:"bi:printer-fill",
+    iconName:"heroicons:rectangle-stack-solid",
   },
   {
     id:4,
@@ -75,57 +78,136 @@ const navigation = [
     iconName:"fa6-solid:users",
   },
 ];
+// data for when click the user profile
 const userNavigation = [
   {
-    name: "Your Profile",
+    name: "Change Password",
+    textColor:"text-primary",
     href: "#",
-    // icon: UserIcon,
+     icon: "uil:key-skeleton",
     title: "Check Out Your Profile.",
   },
   // { name: "Settings", href: "#" },
   {
     name: "Log Out",
+    textColor:"text-red-500",
     href: "",
-    // icon: ArrowRightOnRectangleIcon,
+    icon: "charm:sign-out",
     title: "Log Out of this browser.",
   },
 ];
+
+//notification dummy
+const notification = ref([
+    {
+        id: 1,
+        type: 'new_job',
+        seen: false,
+        title: "Status Change",
+        status: "Approved",
+        remark: 'You have a new job opportunity available. Check it out now!',
+        created_at: '12 May, 2025', is_grouped: false,
+        leadingIcon: "material-symbols:person-3-outline-rounded",
+        subject_id: 5,
+    },
+    {
+        id: 2,
+        type: 'application_status',
+        seen: true,
+        title: "Status Change",
+        status: "Approved",
+        remark: 'Your application for Software Engineer has been reviewed. Check your status!',
+        created_at: '12 May, 2025',
+        leadingIcon: "material-symbols:person-3-outline-rounded",
+        is_grouped: false,
+        subject_id: 12,
+    },
+    {
+        id: 3,
+        type: 'vacancy_closed',
+        seen: false,
+        title: "Status Change",
+        status: "Rejected",
+        remark: 'The vacancy for Project Manager has been closed. Thank you for applying.',
+        created_at: '12 May, 2025', leadingIcon: "material-symbols:person-3-outline-rounded",
+
+        is_grouped: false,
+        subject_id: null,
+    },
+    {
+        id: 4,
+        type: 'assessment_score',
+        seen: false,
+        title: "Status Change",
+        status: "Rejected",
+        remark: 'Your assessment results are now available. Click to view your score.',
+        created_at: '12 May, 2025',
+        leadingIcon: "material-symbols:person-3-outline-rounded",
+
+        is_grouped: false,
+        subject_id: 101,
+    },
+    {
+        id: 5,
+        type: 'scheduled_assessment',
+        seen: true,
+        title: "Status Change",
+        status: "",
+        remark: 'You have a scheduled assessment for the Data Analyst position on January 20, 2025.',
+        created_at: '12 May, 2025', leadingIcon: "material-symbols:person-3-outline-rounded",
+
+        is_grouped: false,
+        subject_id: 202,
+    },
+
+
+]);
+
+const onSubmit = handleSubmit(() => {
+  console.log('Form submitted');
+  const output = {
+    name: fullName.value,
+    email: Email.value,
+    partner: selectedValue.value,
+  };
+  console.log(output);
+  isModalOpen.value=false
+});
+
+const navigate=(item)=>{
+  if(item.name==="Change Password"){
+    isModalOpen.value=true
+
+  }
+
+}
+
 const handleclick = (value) => {
   currentPage.value = value;
+  
 };
 
-watch(
-      () => route.path,
-      (newPath) => {
-        if (newPath === "/app/admin/") {
-          currentPage.value = "Dashboard";
-        } else if (newPath === "/app/admin/address") {
-          currentPage.value = "Address";
-        } else if (newPath === "/app/admin/interventions") {
-          currentPage.value = "Interventions";
-        } else if (newPath === "/app/admin/support") {
-          currentPage.value = "Support";
-        } else {
-          currentPage.value = "Users";  
-        }
-      }
-    );
 
+    const updateCurrentPage=(path)=> {
+  if (path === "/app/admin/") {
+    currentPage.value = "Dashboard";
+  } else if (path === "/app/admin/address") {
+    currentPage.value = "Address";
+  } else if (path === "/app/admin/interventions") {
+    currentPage.value = "Interventions";
+  } else if (path === "/app/admin/support") {
+    currentPage.value = "Support";
+  } else {
+    currentPage.value = "Users";
+  }
+  
+}
 watch(
   () => isFocused.value,
   () => {}
 );
 
-const handleFocus = () => {
-  isFocused.value = true;
-};
 
-const handleBlur = () => {
-  isFocused.value = false;
-};
-
-// document.addEventListener("focus", handleFocus);
-// document.addEventListener("blur", handleBlur);
 
 
 
@@ -143,12 +225,14 @@ const minify = () => {
 };
 
 
-function logout() {
+const logout=()=> {
 
   router.push("/"); // re-route to login page
 }
 
-
+onMounted(()=>{
+  updateCurrentPage(route.path)
+})
 
 </script>
 <template>
@@ -185,6 +269,120 @@ function logout() {
         </button>
       </template>
     </h-confirm>
+
+      <!-- /* ------------------------ Profile change modal ----------------------- */ -->
+
+      <HModal
+      :modelValue="isModalOpen"
+      mainClass="relative px-4 pt-5 pb-6 text-left transition-all transform rounded-lg  overflow-y-auto h-[560px] bg-white w-[100%] md:w-[30rem] shadow-xl sm:my-8 sm:w-full sm:p-9"
+      @update:modelValue="isModalOpen = $event"
+      title="Sample Modal"
+      wrapperClass=""
+      :autoClose="true"
+      :hasCloseIcon="true"
+      :enabledOverflow="false"
+    >
+      <template #Heading>
+           <form @submit.prevent="onSubmit" as="div" class="pt-12 flex flex-col gap-y-5 w-full">
+           
+            <HTextField  
+           :modelValue="currentPassword"
+           @update:modelValue="(value) => { currentPassword = value}"
+            type="password"
+            name="currentPassword"
+            rules="required"
+            inputClass="block w-[26rem] text-base mt-4  dark:bg-gray-700 dark:text-gray-300 placeholder-gray-300 dark:placeholder-secondary py-3 transition-all duration-300 rounded-md font-body focus:outline-none border-[1px]  border-gray-300 group-hover:border-gray-500 focus:border-gray-600 focus:ring-gray-600 disabled:bg-gray-100 disabled:cursor-not-allowed "
+            >
+                <template #label>
+                    <p class="text-[#7A7A7A] mt-4 md:mt-0">Current Password</p>
+
+                </template>
+
+            </HTextField>
+            <HTextField  
+            :modelValue="newPassword"
+            @update:modelValue="(value) => { newPassword = value}"
+            type="password"
+            name="newPassword" 
+            rules="required"    
+            inputClass="block w-[26rem] mt-4 text-base dark:bg-gray-700 dark:text-gray-300 placeholder-gray-300 dark:placeholder-secondary py-3 transition-all duration-300 rounded-md font-body focus:outline-none border-[1px]  border-gray-300 group-hover:border-gray-500 focus:border-gray-600 focus:ring-gray-600 disabled:bg-gray-100 disabled:cursor-not-allowed "
+            >
+                <template #label>
+                    <p class="text-[#7A7A7A]">New Password</p>
+
+                </template>
+
+            </HTextField>
+
+            <HTextField  
+            :modelValue="confirmPassword"
+            @update:modelValue="(value) => { confirmPassword = value}"
+            type="password"
+            name="confirmPassword" 
+            rules="required"    
+            inputClass="block w-[26rem] mt-4 text-base dark:bg-gray-700 dark:text-gray-300 placeholder-gray-300 dark:placeholder-secondary py-3 transition-all duration-300 rounded-md font-body focus:outline-none border-[1px]  border-gray-300 group-hover:border-gray-500 focus:border-gray-600 focus:ring-gray-600 disabled:bg-gray-100 disabled:cursor-not-allowed "
+            >
+                <template #label>
+                    <p class="text-[#7A7A7A]">Confirm Password</p>
+
+                </template>
+
+            </HTextField>
+            
+                <button type="submit" class="text-white bg-primary self-center mt-2  rounded-3xl py-2 w-60  text-center">Submit</button>
+
+            
+
+        </form>
+         
+      </template>
+
+      <template #content>
+        
+            <h2 class=" font-semibold text-2xl">Change Password</h2>
+            
+          <div class=" flex items-center  mt-5 pb-4">
+            <hr class="w-full border-t-2 border-gray-300">
+        </div>
+        
+      </template>
+    </HModal>
+
+
+    <!-- /* ------------------------ Add user modal ----------------------- */ -->
+
+    <HModal
+      :modelValue="showNotificationList"
+      mainClass="absolute top-6 right-56 px-4  pb-6 text-left transition-all   transform rounded-lg  overflow-y-auto h-[800px] bg-white  md:w-[35rem] shadow-xl sm:my-8 sm:w-full sm:p-9"
+      @update:modelValue="showNotificationList = $event"
+      title="Sample Modal"
+      wrapperClass=""
+      :autoClose="true"
+      :hasCloseIcon="true"
+      :enabledOverflow="false"
+    >
+      <template #Heading>
+        <div class="mt-8" v-for="data in notification" :key="data.id"> 
+          <h-notification :notification="data" />
+          <div class="flex items-center mt-2 pb-4">
+            <hr class="w-full border-b-1 border-gray-300">
+        </div>
+        
+        </div>
+      </template>
+
+      <template #content>
+        
+            <h2 class=" font-semibold text-xl  text-[#222324]">Notifications</h2>
+            
+       <div class="flex items-center  mt-5 pb-4">
+            <hr class="w-full border-t-2 border-gray-300">
+        </div>
+        
+      </template>
+    </HModal>
+      
+   
     <!-- /*                                Main Content                                */ -->
     <TransitionRoot as="template"  :show="sidebarOpen">
       <Dialog
@@ -208,7 +406,7 @@ function logout() {
           </div>
         </TransitionChild>
 
-        <div class="fixed inset-0 z-50 flex max-w-[300px] ">
+        <div class="fixed  inset-0 z-50 flex max-w-[300px] ">
           <TransitionChild
             as="template"
             enter="transition ease-in-out duration-300 transform"
@@ -258,7 +456,7 @@ function logout() {
               v-for="item in navigation"
               :key="item.name"
               :to="item.href"
-              @click="handleclick(item.name)"
+              @click="handleclick(item.href)"
               :class="[
                 currentPage === item.name
                   ? 'bg-gray-900 text-white'
@@ -406,7 +604,7 @@ function logout() {
         <div
           class="flex flex-1 justify-between px-4 items-center text-center dark:text-secondary-11 "
         >
-          <div
+          <!-- <div
             class="md:text-xl lg:ml-3 3xl:ml-5 flex flex-row items-center py-2"
           >
           <Icon name="ph:fediverse-logo-light" class="w-12 h-12 text-primary"/>
@@ -414,7 +612,8 @@ function logout() {
             <p class="font-bold">THE BRIDGES</p>
             <p class="text-secondary ">PROGRAMME</p></div>
             
-          </div>
+          </div> -->
+          <img src="/steep_logo.jpg" class="h-12 w-36" alt="no" />
           <div class="ml-4 flex items-center md:ml-6">
           
             <div class="flex items-center space-x-4 md:mr-5">
@@ -470,7 +669,7 @@ function logout() {
                   leave-to-class="transform opacity-0 scale-95"
                 >
                   <MenuItems
-                    class="absolute right-0 z-10 mt-2 w-48 overflow-clip origin-top-right rounded-md bg-secondary-8 dark:bg-secondary shadow-lg ring-1 ring-secondary ring-opacity-5 focus:outline-none divide divide-y-[1px] divide-secondary-7 dark:divide-secondary-3/10"
+                    class="absolute right-0 z-10 mt-2  w-48 overflow-clip origin-top-right rounded-md bg-secondary-8 dark:bg-secondary shadow-lg ring-1 ring-secondary ring-opacity-5 focus:outline-none divide divide-y-[1px] divide-secondary-7 dark:divide-secondary-3/10"
                   >
                     <MenuItem
                       v-for="item in userNavigation"
@@ -479,10 +678,11 @@ function logout() {
                       class="menuItem"
                       :title="item.title"
                     >
-                      <div class="menuItemButton group">
+                      <div class="menuItemButton flex py-2 px-2 cursor-pointer hover:bg-[#b3e0db]  gap-x-3 group">
                         <div class="w-5 h-5">
-                          
+                          <Icon class="w-5 h-5" :class="item.textColor"  :name="item.icon"/>
                         </div>
+                        
                         <div>{{ item.name }}</div>
                       </div>
                     </MenuItem>

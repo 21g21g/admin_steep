@@ -16,7 +16,7 @@ const props=defineProps({
 
 <template>
     <NuxtLink :class="classes" :to="`/app/admin/${title.charAt(0).toLowerCase()}${title.substring(1)}`" class="flex flex-col   ring ring-[#D1D5DB] hover:ring-primary ring-inset py-8 lg:mt-10 shadow-2xl shadow-[]#7A7A7A  px-10  rounded-lg group">
-    <div class="flex flex-row gap-x-2">
+    <div class="flex flex-row items-center gap-x-2">
     <Icon  class="lg:w-12 h-12" :name="iconname"/>
     <h1 class="font-medium lg:text-4xl text-[#161344]">{{title}}</h1>
     </div>

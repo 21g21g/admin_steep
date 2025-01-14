@@ -35,7 +35,7 @@ const props = defineProps({
   mainClass: {
     type: String,
     default:
-      "relative px-4 pt-5 pb-4 text-left transition-all transform rounded-lg h-auto shadow-xl sm:my-8 sm:w-full sm:p-9",
+      "",
   },
 });
 
@@ -65,9 +65,13 @@ const open = computed({
         leave-to="opacity-0"
       >
         <div
-          class="fixed  inset-0 transition-opacity bg-gray-500 bg-opacity-20"
+          class="fixed  inset-0 transition-opacity  bg-white bg-opacity-20"
         />
+        
       </TransitionChild>
+      <DialogOverlay
+            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          />
 
       <div class="fixed  inset-0 z-10 overflow-y-auto">
         <div
@@ -101,13 +105,13 @@ const open = computed({
               <button
                 v-if="hasCloseIcon"
                 type="button"
-                class="absolute lg:w-10 lg:h-10 text-gray-400 rounded-md right-6 shrink-0 hover:text-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-100 hover:border"
+                class="absolute lg:w-10 lg:h-10 text-gray-400 rounded-md right-6 shrink-0  hover:bg-primary focus:outline-none focus:ring-1 focus:ring-gray-100 hover:border"
                 @click="open = false"
               >
                 <span class="sr-only">Close</span>
                 <Icon
                   name="ion:close-outline"
-                  class="text-2xl lg:text text-gray-900 dark:text-white"
+                  class="text-2xl hover:text-white lg:text text-gray-900 dark:text-white"
                 />
               </button>
               <slot name="content" />
