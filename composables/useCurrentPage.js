@@ -1,28 +1,37 @@
 import { ref } from "vue";
 
-export function useCurrentPage() {
+export const useCurrentPage=(path)=> {
   const currentPage = ref("");
 
-  // Define a mapping of paths to page names
-  const pageMapping = [
-    { path: "/app/admin/", name: "Dashboard" },
-    { path: "/app/admin/address", name: "Address" },
-    { path: "/app/admin/address/region", name: "Region" },
-    { path: "/app/admin/address/subcity", name: "Subcity" },
-    { path: "/app/admin/address/woreda", name: "Woreda" },
-    { path: "/app/admin/interventions", name: "Interventions" },
-    { path: "/app/admin/support", name: "Support" },
-    { path: "/app/admin/users", name: "Users" },
-  ];
+  if (path === "/app/admin/") {
+    currentPage.value = "Dashboard";
+  } else if (path === "/app/admin/address") {
+    currentPage.value = "Address";
+  } else if (path === "/app/admin/interventions") {
+    currentPage.value = "Interventions";
+  } else if (path === "/app/admin/support") {
+    currentPage.value = "Support";
+  }
+   else if(path === "/app/admin/users") {
+    currentPage.value = "Users";
+  }
+  else if (path === "/app/admin/address/") {
+    currentPage.value = "Region/City";
+  } else if (path === "/app/admin/address/subcity") {
+    currentPage.value = "Subcity/Zone";
+  } else if (path === "/app/admin/address/woreda") {
+    currentPage.value = "Woreda/Town";
+  }  
+  else{
+    ''
+  }
+
+ // check the path of the current page
 
 
-  // Update the current page based on the path
-  const updateCurrentPage = (path) => {
-    currentPage.value = pageMapping[path] || "Unknown Page"; // Fallback for undefined paths
-  };
+ 
 
   return {
     currentPage,
-    updateCurrentPage,
   };
 }

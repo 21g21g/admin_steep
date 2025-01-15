@@ -10,7 +10,7 @@ definePageMeta({
   <div class="flex flex-wrap gap-6">
     <AdminCard iconname="heroicons:rectangle-stack-solid" title="Interventions" classes="lg:w-[35%] w-full md:w-[48%]">
       <template #content>
-        <div class="flex flex-col lg:flex-row gap-6 2xl:gap-x-10">
+        <div class="flex flex-col ml-8 lg:flex-row gap-6 2xl:gap-x-10">
           <div class="flex flex-col gap-y-2 2xl:gap-y-16">
             <h1 class="font-bold text-3xl lg:text-5xl text-[#161344]">14</h1>
             <h2 class="text-[#161344] text-base lg:text-lg">Intervention Types</h2>
@@ -26,7 +26,7 @@ definePageMeta({
 
     <AdminCard iconname="gridicons:location" title="Address" classes="lg:w-[54%] w-full md:w-[48%]">
       <template #content>
-        <div class="flex flex-col lg:flex-row gap-6 2xl:gap-x-12 3xl:gap-x-16 4xl:gap-x-24">
+        <div class="flex flex-col  ml-8 lg:flex-row gap-6 2xl:gap-x-12 3xl:gap-x-16 4xl:gap-x-24">
           <div class="flex flex-col gap-y-2 2xl:gap-y-16">
             <h1 class="font-bold text-3xl 2xl:text-5xl text-[#161344]">14</h1>
             <h2 class="text-[#161344] text-base lg:text-lg">Region/City</h2>
@@ -49,7 +49,7 @@ definePageMeta({
   <div class="flex flex-wrap gap-24">
     <AdminCard iconname="arcticons:rakuten-link-supporter" title="Support" classes="w-full lg:w-[60%]">
       <template #content>
-        <div class="flex flex-col lg:flex-row gap-6 2xl:gap-x-12 3xl:gap-x-12 4xl:gap-x-16">
+        <div class="flex flex-col  ml-8 lg:flex-row gap-6 2xl:gap-x-12 3xl:gap-x-12 4xl:gap-x-16">
           <div class="flex flex-col gap-y-2 2xl:gap-y-16">
             <h1 class="font-bold text-3xl xl:text-5xl text-[#161344]">14</h1>
             <h2 class="text-[#161344] text-base lg:text-lg">Training</h2>

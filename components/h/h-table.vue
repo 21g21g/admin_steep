@@ -142,7 +142,7 @@ onMounted(() => {
                                 class="text-sm 2xl:text-[1rem] align-middle 2xl:px-6  overflow-hidden text-gray-800 p-2">
                                 {{ item[header.value] }}
                             </span>
-                            <span v-else class="align-middle px-3 2xl:px-12 relative ">
+                            <span v-else class="align-middle  px-3 2xl:px-12 relative ">
                                 <!-- Show a three-dot icon for the Actions column -->
                                 <Icon :name="'fa-ellipsis-v'" @click="toggleDelete(item)" />
                                 <!-- Conditionally show the delete button if showDelete is true -->

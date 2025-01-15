@@ -4,6 +4,7 @@ import { useWindowSize } from "@vueuse/core";
 import { useRoute, useRouter } from "vue-router";
 import { useForm } from 'vee-validate';
 
+
 import {
   Dialog,
   DialogPanel,
@@ -285,7 +286,7 @@ onMounted(()=>{
       <template #Heading>
            <form @submit.prevent="onSubmit" as="div" class="pt-12 flex flex-col gap-y-5 w-full">
            
-            <HTextField  
+            <h-textfield  
            :modelValue="currentPassword"
            @update:modelValue="(value) => { currentPassword = value}"
             type="password"
@@ -298,8 +299,8 @@ onMounted(()=>{
 
                 </template>
 
-            </HTextField>
-            <HTextField  
+            </h-textfield>
+            <h-textfield  
             :modelValue="newPassword"
             @update:modelValue="(value) => { newPassword = value}"
             type="password"
@@ -312,9 +313,9 @@ onMounted(()=>{
 
                 </template>
 
-            </HTextField>
+            </h-textfield>
 
-            <HTextField  
+            <h-textfield  
             :modelValue="confirmPassword"
             @update:modelValue="(value) => { confirmPassword = value}"
             type="password"
@@ -327,7 +328,7 @@ onMounted(()=>{
 
                 </template>
 
-            </HTextField>
+            </h-textfield>
             
                 <button type="submit" class="text-white bg-primary self-center mt-2  rounded-3xl py-2 w-60  text-center">Submit</button>
 
@@ -353,7 +354,7 @@ onMounted(()=>{
 
     <HModal
       :modelValue="showNotificationList"
-      mainClass="absolute top-6 right-56 px-4  pb-6 text-left transition-all   transform rounded-lg  overflow-y-auto h-[800px] bg-white  md:w-[35rem] shadow-xl sm:my-8 sm:w-full sm:p-9"
+      mainClass="absolute top-6 md:right-56 px-4  pb-6 text-left transition-all   transform rounded-lg  overflow-y-auto h-[800px] bg-white w-[25rem]  md:w-[35rem] shadow-xl sm:my-8 sm:w-full sm:p-9"
       @update:modelValue="showNotificationList = $event"
       title="Sample Modal"
       wrapperClass=""
@@ -444,7 +445,6 @@ onMounted(()=>{
                 to="/app/"
                 class="flex-shrink-0 my-8 z-50 flex-col mx-auto space-y-1"
               >
-              <Icon name="ph:fediverse-logo-light" class="w-12 h-12 text-primary"/>
 
                 <!-- <p class="text-secondary-6 text-sm">Primary</p> -->
               </nuxt-link>
@@ -460,7 +460,7 @@ onMounted(()=>{
               :class="[
                 currentPage === item.name
                   ? 'bg-gray-900 text-white'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                  : 'text-gray-300  hover:text-white',
                   'rounded-md px-3 py-2 text-sm font-bold',
               ]"
               :aria-current="currentPage === item.name ? 'page' : undefined"

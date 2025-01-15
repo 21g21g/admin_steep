@@ -118,7 +118,7 @@ const onSubmit = handleSubmit(() => {
       <template #Heading>
            <form @submit.prevent="onSubmit" as="div" class="pt-12 flex flex-col gap-y-5 w-full">
            
-            <HTextField  
+            <h-textfield  
            :modelValue="fullName"
            @update:modelValue="(value) => { fullName = value}"
             type="text"
@@ -131,8 +131,8 @@ const onSubmit = handleSubmit(() => {
 
                 </template>
 
-            </HTextField>
-            <HTextField  
+            </h-textfield>
+            <h-textfield  
             :modelValue="Email"
             @update:modelValue="(value) => { Email = value}"
             type="email"
@@ -145,9 +145,9 @@ const onSubmit = handleSubmit(() => {
 
                 </template>
 
-            </HTextField>
+            </h-textfield>
 
-            <HListSelect 
+            <h-select 
             id="dropdown-id"
              name="dropdownName"
              
@@ -171,7 +171,7 @@ const onSubmit = handleSubmit(() => {
 
                 </template>
                 
-            </HListSelect>
+            </h-select>
 
              <div class="w-full justify-end mt-8 md:ml-[22rem]">
                 <button type="submit" class="text-white bg-primary rounded-2xl py-2 w-36 text-center">Invite</button>
@@ -213,12 +213,12 @@ const onSubmit = handleSubmit(() => {
     <!-- Header Section -->
     <div class="flex justify-between items-center lg:pr-8 mt-4 lg:mt-0">
       <h1 class="text-lg lg:text-2xl 3xl:text-3xl font-light text-[#161344]">Users</h1>
-      <AdminButton @click="isModalOpen = true" iconName="material-symbols:add" buttonLabel="Add User" />
+      <h-button @click="isModalOpen = true" iconName="material-symbols:add" buttonLabel="Add User" />
     </div>
 
     <!-- Search Section -->
     <div class="mt-4">
-      <HTextField
+      <h-textfield
         :modelValue="searchText"
         inputClass="block w-full md:w-96 text-base text-gray-800 dark:bg-gray-700 dark:text-gray-300 placeholder-gray-300 dark:placeholder-secondary py-3 transition-all duration-300 rounded-md font-body focus:outline-none border-[1px] border-gray-300 group-hover:border-gray-500 focus:border-gray-600 focus:ring-gray-600 disabled:bg-gray-100 disabled:cursor-not-allowed"
         name="searchField"

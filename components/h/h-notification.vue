@@ -28,10 +28,10 @@ console.log("Notification Object:", props.notification);
             <div class="bg-primary-4 rounded-full px-2 py-1">
                 <Icon class="w-4 h-4" :name="notification.leadingIcon" />
             </div>
-            <div class="flex  flex-col gap-y-2">
+            <div class="flex  flex-col mt-10 lg:mt-3 gap-y-2">
                 <div class="flex justify-between">
                     <div>
-                        <h1 class="text-lg text-[#222324] ">{{ notification.title }}</h1>
+                        <h1 class="text-sm md:text-lg text-[#222324] ">{{ notification.title }}</h1>
                     </div>
                     <p class="text-[#7A7A7A] text-xs">
                         {{ notification.created_at }}
@@ -42,13 +42,13 @@ console.log("Notification Object:", props.notification);
                     <div v-html="notification.remark" class="text-[#7A7A7A] text-sm">
 
                     </div>
-                    <div class="ml-auto w-fit group-hover:hidden">
+                    <div class="text-xs md:text-base lg:text-lg ml-auto  group-hover:hidden">
                         {{ notification.status }}
                     </div>
 
                 </div>
                 <div>
-                    <button class="text-primary">View Now</button>
+                    <button class="text-xs md:text-base lg:text-lg text-primary">View Now</button>
                 </div>
             </div>
 

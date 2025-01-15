@@ -8,23 +8,18 @@ const textValue = ref("");
 const navigation = [
   {
     id: 1,
-    name: "Region/City",
-    href: "/app/admin/address/",
-    title: "Region/City",
+    name: "Intervention Types",
+    href: "/app/admin/interventions/",
+    title: "Intervention Types",
     current: true,
   },
   {
     id: 2,
-    name: "Subcity/Zone",
-    href: "/app/admin/address/subcity",
-    title: "Subcity/Zone",
-  },
-  {
-    id: 3,
-    name: "Woreda/Town",
-    href: "/app/admin/address/woreda",
-    title: "Woreda/Town",
-  },
+    name: "Intervention Category",
+    href: "/app/admin/interventions/category",
+    title: "Intervention Category",
+  }
+  
 ];
 
 const handleclick = (value) => {
@@ -32,12 +27,10 @@ const handleclick = (value) => {
 };
 
 const updateCurrentPage = (path) => {
-  if (path === "/app/admin/address/") {
-    currentPage.value = "Region/City";
-  } else if (path === "/app/admin/address/subcity") {
-    currentPage.value = "Subcity/Zone";
-  } else if (path === "/app/admin/address/woreda") {
-    currentPage.value = "Woreda/Town";
+  if (path === "/app/admin/interventions/") {
+    currentPage.value = "Intervention Types";
+  } else if (path === "/app/admin/interventions/category") {
+    currentPage.value = "Intervention Category";
   }
 };
 
@@ -50,7 +43,7 @@ onMounted(() => {
   <div class="flex flex-col lg:flex-row lg:gap-6 p-4 lg:p-6 min-h-screen">
     <!-- Sidebar -->
     <div>
-      <div class="flex flex-col lg:w-1/4 rounded-lg p-4">
+      <div class="flex flex-col lg:w-full rounded-lg p-4">
         <ul class="space-y-3">
           <li
             v-for="nav in navigation"
@@ -86,14 +79,14 @@ onMounted(() => {
       <!-- Header -->
       <div class="flex flex-wrap items-center">
         <h1 class="text-xs md:text-sm text-[#161344]">
-          Address / {{ currentPage || "Region/City" }}
+          Interventions / {{ currentPage || "Intervention Types" }}
         </h1>
        
       </div>
 
       <div class="flex flex-wrap lg:flex-nowrap items-start lg:items-center justify-between gap-y-4">
         <h1 class="text-lg lg:text-2xl text-[#161344]">
-          {{ currentPage || "Region/City" }}
+          {{ currentPage || "Intervention Types" }}
         </h1>
         <div>
           <slot name="button" />

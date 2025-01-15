@@ -183,7 +183,7 @@ const clear = () => {
           props.class ? props.class : '',
           props.placeholderStyle
             ? props.placeholderStyle
-            : ' placeholder:text-gray-300 dark:placeholder:text-gray-300',
+            : ' placeholder:text-gray-400 pl-3 dark:placeholder:text-gray-300',
           props.trailingIcon ? 'pr-7' : '',
           props.type == 'password' ? 'pr-7' : '',
         ]"
