@@ -1,7 +1,11 @@
 <script setup>
+import { useForm } from 'vee-validate';
+
 definePageMeta({
   layout: "admin",
 });
+
+const { handleSubmit } = useForm();
 
 const searchText = ref("");
 const isModalOpen = ref(false);
@@ -33,6 +37,15 @@ const headers = ref([
     sortable: false,
   },
 ]);
+const onSubmit = handleSubmit(() => {
+  console.log('Form submitted');
+  const output = {
+    region: region.value,
+   
+  };
+  console.log(output);
+  isModalOpen.value=false
+});
 </script>
 
 <template>
@@ -51,7 +64,7 @@ const headers = ref([
     <template #contents>
       <HModal
         :modelValue="isModalOpen"
-        mainClass="relative px-4 pt-5 pb-6 text-left transition-all transform rounded-lg overflow-y-auto h-[350px] bg-white w-full md:w-[40rem] shadow-xl sm:my-8 sm:p-9"
+        mainClass="absolute top-36 md:top-0 md:relative px-4 pt-5 pb-6 text-left transition-all transform rounded-lg overflow-y-auto h-[350px] bg-white w-[90%] md:w-[40rem] shadow-xl sm:my-8 sm:p-9"
         @update:modelValue="isModalOpen = $event"
         title="Sample Modal"
         :autoClose="true"
@@ -61,7 +74,7 @@ const headers = ref([
         <template #Heading>
           <form
             @submit.prevent="onSubmit"
-            class="pt-12 flex flex-col gap-y-5 w-full"
+            class="pt-12 flex flex-col   gap-y-5 w-full"
           >
             <h-textfield
               :modelValue="region"
@@ -82,12 +95,12 @@ const headers = ref([
           </form>
         </template>
         <template #content>
-          <h2 class="font-semibold text-2xl text-center md:text-left">
+          <h2 class="font-semibold text-2xl  md:text-left">
             Create Region/City
           </h2>
           <div class="relative flex items-center mt-5 pb-4">
             <span
-              class="absolute left-3 bg-gray-300 h-2 w-2 rounded-full"
+              class="absolute  bg-gray-300 h-2 w-2 rounded-full"
             ></span>
             <hr class="w-full border-t-2 border-gray-300" />
           </div>

@@ -1,12 +1,21 @@
 <script setup>
+import { useForm } from 'vee-validate';
+
 definePageMeta({
     layout: "admin",
   });
+
+  const { handleSubmit } = useForm();
+
   
   const searchText = ref("");
   const isModalOpen = ref(false);
   const category = ref("");
   const description=ref("")
+  const currentPage = ref(1); 
+  const currentOffset = ref(0); 
+const isDataLoading = ref(false); 
+const itemsPerPage = ref(5);
   const sort = ref([
     { label: "Ascending", value: "asc" },
     { label: "Descending", value: "desc" },
@@ -19,6 +28,20 @@ definePageMeta({
     { id: 5, region: "Gambela", actions: "icon" },
     { id: 6, region: "Oromia", actions: "icon" },
     { id: 7, region: "Tigray", actions: "icon" },
+    { id: 8, region: "Addis Ababa" },
+    { id: 9, region: "Afar" },
+    { id: 10, region: "Amhara", actions: "icon" },
+    { id: 11, region: "Dire Dawa", actions: "icon" },
+    { id: 12, region: "Gambela", actions: "icon" },
+    { id: 13, region: "Oromia", actions: "icon" },
+    { id: 14, region: "Tigray", actions: "icon" },
+    { id: 15, region: "Addis Ababa" },
+    { id: 16, region: "Afar" },
+    { id: 17, region: "Amhara", actions: "icon" },
+    { id: 18, region: "Dire Dawa", actions: "icon" },
+    { id: 19, region: "Gambela", actions: "icon" },
+    { id: 20, region: "Oromia", actions: "icon" },
+    { id: 21, region: "Tigray", actions: "icon" },
   ]);
   const headers = ref([
     {
@@ -34,6 +57,46 @@ definePageMeta({
       sortable: false,
     },
   ]);
+
+  const onSubmit = handleSubmit(() => {
+  console.log('Form submitted');
+  const output = {
+    category: category.value,
+    description:description.value
+   
+  };
+  console.log(output);
+  isModalOpen.value=false
+});
+
+
+
+const totalData = computed(() => DummyData.value.length); 
+// Calculated total pages (used for `length`)
+const calculatedLength = computed(() =>
+  Math.ceil(totalData.value / itemsPerPage.value)
+);
+
+const paginatedData = computed(() => {
+  const start = currentOffset.value;
+  const end = start + itemsPerPage.value;
+  return DummyData.value.slice(start, end);
+});
+
+// Watch currentPage to update offset dynamically
+watch(currentPage, (newPage) => {
+  currentOffset.value = (newPage - 1) * itemsPerPage.value;
+});
+
+const onOffsetChange = (newOffset) => {
+  currentOffset.value = newOffset;
+  console.log('Offset updated to:', newOffset);
+};
+
+const onPageChange = () => {
+  console.log('Page changed to:', currentPage.value);
+};
+
 </script>
   <template>
    
@@ -51,7 +114,7 @@ definePageMeta({
 <template #contents>
     <HModal
     :modelValue="isModalOpen"
-    mainClass="relative px-4 pt-5 pb-6 text-left transition-all transform rounded-lg overflow-y-auto h-[580px] bg-white w-full md:w-[40rem] shadow-xl sm:my-8 sm:p-9"
+    mainClass="absolute md:top-28 md:top:0 md:relative px-4 pt-5 pb-6 text-left transition-all transform rounded-lg overflow-y-auto h-[580px] bg-white w-[90%] md:w-[40rem] shadow-xl sm:my-8 sm:p-9"
     @update:modelValue="isModalOpen = $event"
     title="Sample Modal"
     :autoClose="true"
@@ -77,7 +140,7 @@ definePageMeta({
           </template>
         </h-textfield>
 
-        <h-text-area
+         <h-text-area
           :modelValue="description"
           @update:modelValue="(value) => { description = value }"
           type="textarea"
@@ -98,7 +161,7 @@ definePageMeta({
       </form>
     </template>
     <template #content>
-      <h2 class="font-semibold text-2xl text-center md:text-left">
+      <h2 class="font-semibold text-2xl md:text-left">
         Create Intervention Category
       </h2>
       <div class="relative flex items-center mt-5 pb-4">
@@ -109,31 +172,41 @@ definePageMeta({
       </div>
     </template>
   </HModal>
-  <!-- Search Field -->
-    <h-textfield
-      :modelValue="searchText"
-      inputClass="block w-full md:w-96 text-base mt-3 text-gray-800 dark:bg-gray-700 dark:text-gray-300 placeholder-gray-300 dark:placeholder-secondary py-3 transition-all duration-300 rounded-md font-body focus:outline-none border-[1px] border-gray-300 focus:border-gray-600 focus:ring-gray-600 disabled:bg-gray-100 disabled:cursor-not-allowed"
-      name="searchField"
-      label="Search"
-      :maxlength="100"
-      placeholder="Search"
-      trailingIcon="uil:search-alt"
-      trailingIconClass="absolute inset-y-0 right-0 md:left-[22rem] text-[#161344] 3xl:right-[55rem] flex items-center pr-3 hover:cursor-pointer"
-      id="searchInput"
-      labelClass="text-sm lg:text-base font-medium"
-    />
-
-  <!-- Table -->
-  <div class="mt-3 overflow-x-auto">
-    <h-table
+   <!-- Table -->
+   <div class="mt-3 flex flex-col overflow-x-auto">
+    <div>
+      <h-table
       :headers="headers"
       :hasCheckBox="false"
       :sort="sort"
-      :items="DummyData"
+      :items="paginatedData"
       rowStyle="border-table-border border-b"
       rowHeadStyle="bg-secondary-lite-3 dark:bg-secondary-9/30 py-4 text-secondary-2 dark:text-secondary-7"
       supporterClass="overflow-x-auto max-h-[70vh]"
     />
+    </div>
+
+   
+    <div>
+       
+  <div class="flex justify-end">
+    <h-paginate
+       v-model="currentPage"
+      :length="calculatedLength"
+      :itemsPerPage="itemsPerPage"
+      :totalData="totalData"
+      :offset="currentOffset"
+      :disabled="isDataLoading"
+      @update:offset="onOffsetChange"
+      @paginate="onPageChange"
+    />
+
+ 
+
+  </div>
+
+
+    </div>
   </div>
 </template>
 </AdminInterventionLayout>

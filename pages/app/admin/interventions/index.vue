@@ -10,7 +10,8 @@ definePageMeta({
 
   // buttons data when the modal open
 
-  const buttons=[
+  const buttons=
+  [
   {
     id:1,
     name:"Personal Info"
@@ -54,6 +55,42 @@ definePageMeta({
     },
   ]);
 
+
+// Reactive state
+const currentPage = ref(1); 
+const itemsPerPage = ref(5); 
+const totalData = computed(() => DummyData.value.length); 
+const currentOffset = ref(0); 
+const isDataLoading = ref(false); 
+
+// Calculated total pages (used for `length`)
+const calculatedLength = computed(() =>
+  Math.ceil(totalData.value / itemsPerPage.value)
+);
+
+// Paginated data based on current page
+const paginatedData = computed(() => {
+  const start = currentOffset.value;
+  const end = start + itemsPerPage.value;
+  return DummyData.value.slice(start, end);
+});
+
+// Watch currentPage to update offset dynamically
+watch(currentPage, (newPage) => {
+  currentOffset.value = (newPage - 1) * itemsPerPage.value;
+});
+
+// Event handlers
+const onOffsetChange = (newOffset) => {
+  currentOffset.value = newOffset;
+  console.log('Offset updated to:', newOffset);
+};
+
+const onPageChange = () => {
+  console.log('Page changed to:', currentPage.value);
+};
+
+
 </script>
   <template>
    
@@ -71,7 +108,7 @@ definePageMeta({
 <template #contents>
   <HModal
     :modelValue="isModalOpen"
-    mainClass="absolute top-28 px-4 pt-5 pb-6 text-left transition-all transform rounded-lg overflow-y-auto h-[720px] bg-white w-full md:w-[40rem] shadow-xl sm:my-8 sm:p-9"
+    mainClass="absolute top-28 px-4 pt-5 pb-6 text-left transition-all transform rounded-lg overflow-y-auto h-[720px] bg-white w-[90%] md:w-[40rem] shadow-xl sm:my-8 sm:p-9"
     @update:modelValue="isModalOpen = $event"
     title="Sample Modal"
     :autoClose="true"
@@ -111,9 +148,24 @@ definePageMeta({
 
         </h-text-area>
         <div class="flex flex-col">
-            <h1 class="text-[#7A7A7A]">Categories <span><Icon name="mingcute:warning-fill"  class="text-primary"/></span></h1>
-            <div class="flex flex-row gap-x-2 py-7 mt-3 px-3 border-[1px] rounded-lg border-slate-400  ">
-                <button v-for="button in buttons" :key="button.id" class="border border-primary text-[#7A7A7A]  rounded-3xl px-3 py-1 w-auto text-xs  lg:text-sm  whitespace-nowrap">
+           <div class="flex  flex-row gap-x-2 items-center">
+            <h1 class="text-[#7A7A7A]">Categories </h1>
+            <VTooltip  :distance="3"  placement="bottom-start" offset="-10">
+                
+                <Icon name="mingcute:warning-fill"  class="text-primary rotate-180"/>
+                <template  #popper>
+                  <div class="w-52 bg-slate-400">
+                    <p class="">                
+                      To which Categories will this intervention apply to
+                  </p>
+                  </div>
+                  
+                </template>
+              </VTooltip>
+           </div>
+            
+            <div class="flex flex-row gap-x-2 py-7 mt-3 px-1 md:px-3 border-[1px] rounded-lg border-slate-400  ">
+                <button v-for="button in buttons" :key="button.id" class="border border-primary text-[#7A7A7A]  rounded-3xl px-1 md:px-3 py-1 w-auto text-xs  lg:text-sm  whitespace-nowrap">
             {{ button.name }} <span><Icon name="material-symbols:add" class="text-center text-[#7A7A7A]"/></span>
           </button>
                  
@@ -127,7 +179,7 @@ definePageMeta({
       </form>
     </template>
     <template #content>
-      <h2 class="font-semibold text-2xl text-center md:text-left">
+      <h2 class="font-semibold text-2xl  md:text-left">
         Create Intervention Type
       </h2>
       <div class="relative flex items-center mt-5 pb-4">
@@ -139,31 +191,44 @@ definePageMeta({
     </template>
   </HModal>
 
-  <!-- Search Field -->
-    <h-textfield
-      :modelValue="searchText"
-      inputClass="block w-full md:w-96 text-base mt-3 text-gray-800 dark:bg-gray-700 dark:text-gray-300 placeholder-gray-300 dark:placeholder-secondary py-3 transition-all duration-300 rounded-md font-body focus:outline-none border-[1px] border-gray-300 focus:border-gray-600 focus:ring-gray-600 disabled:bg-gray-100 disabled:cursor-not-allowed"
-      name="searchField"
-      label="Search"
-      :maxlength="100"
-      placeholder="Search"
-      trailingIcon="uil:search-alt"
-      trailingIconClass="absolute inset-y-0 right-0 md:left-[22rem] text-[#161344] 3xl:right-[55rem] flex items-center pr-3 hover:cursor-pointer"
-      id="searchInput"
-      labelClass="text-sm lg:text-base font-medium"
-    />
+
+   
 
   <!-- Table -->
-  <div class="mt-3 overflow-x-auto">
-    <h-table
+  <div class="mt-3 flex flex-col overflow-x-auto">
+    <div>
+      <h-table
       :headers="headers"
       :hasCheckBox="false"
       :sort="sort"
-      :items="DummyData"
+      :items="paginatedData"
       rowStyle="border-table-border border-b"
       rowHeadStyle="bg-secondary-lite-3 dark:bg-secondary-9/30 py-4 text-secondary-2 dark:text-secondary-7"
       supporterClass="overflow-x-auto max-h-[70vh]"
     />
+    </div>
+
+   
+    <div>
+       
+  <div class="flex justify-end">
+    <h-paginate
+       v-model="currentPage"
+      :length="calculatedLength"
+      :itemsPerPage="itemsPerPage"
+      :totalData="totalData"
+      :offset="currentOffset"
+      :disabled="isDataLoading"
+      @update:offset="onOffsetChange"
+      @paginate="onPageChange"
+    />
+
+ 
+
+  </div>
+
+
+    </div>
   </div>
 </template>
 </AdminInterventionLayout>

@@ -9,7 +9,7 @@ const navigation = [
   {
     id: 1,
     name: "Intervention Types",
-    href: "/app/admin/interventions/",
+    href: "/app/admin/interventions",
     title: "Intervention Types",
     current: true,
   },
@@ -27,7 +27,7 @@ const handleclick = (value) => {
 };
 
 const updateCurrentPage = (path) => {
-  if (path === "/app/admin/interventions/") {
+  if (path === "/app/admin/interventions") {
     currentPage.value = "Intervention Types";
   } else if (path === "/app/admin/interventions/category") {
     currentPage.value = "Intervention Category";
@@ -44,7 +44,7 @@ onMounted(() => {
     <!-- Sidebar -->
     <div>
       <div class="flex flex-col lg:w-full rounded-lg p-4">
-        <ul class="space-y-3">
+        <ul class="space-y-3 md:ml-10 md:space-y-8">
           <li
             v-for="nav in navigation"
             :key="nav.id"
@@ -59,8 +59,8 @@ onMounted(() => {
                 class="hover:border-primary px-5"
                 :class="[
                   currentPage === nav.name
-                    ? 'border-l-[4px] border-primary pl-1'
-                    : 'pl-1 py-1 hover:bg-[#697280] hover:text-slate-100 bg-transparent border-transparent border-l-[4px]',
+                    ? 'border-l-[8px] py-1 border-primary pl-1'
+                    : 'pl-1  hover:bg-[#697280] hover:text-slate-100 bg-transparent border-transparent py-2 border-l-[8px]',
                 ]"
               >
                 {{ nav.name }}
@@ -94,7 +94,27 @@ onMounted(() => {
          
       </div>
 
-      <!-- Content Section -->
+        <!-- Search Field -->
+   <div class="flex w-full justify-between items-center">
+    <h-textfield
+      :modelValue="searchText"
+      inputClass="block w-full md:w-96 text-base mt-3 text-gray-800 dark:bg-gray-700 dark:text-gray-300 placeholder-gray-300 dark:placeholder-secondary py-3 transition-all duration-300 rounded-md font-body focus:outline-none border-[1px] border-gray-300 focus:border-gray-600 focus:ring-gray-600 disabled:bg-gray-100 disabled:cursor-not-allowed"
+      name="searchField"
+      label="Search"
+      :maxlength="100"
+      placeholder="Search"
+      trailingIcon="uil:search-alt"
+      trailingIconClass="absolute inset-y-0 right-0  text-[#161344]  flex items-center pr-3 hover:cursor-pointer"
+      id="searchInput"
+      labelClass="text-sm lg:text-base font-medium"
+    />
+    <button>
+      <Icon class="w-10 h-6" name="majesticons:save-as-line"/>
+
+    </button>
+   </div>
+         <!-- Content Section -->
+
       <div class="py-6">
         <slot name="contents" />
       </div>

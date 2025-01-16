@@ -1,37 +1,23 @@
-import { ref } from "vue";
 
-export const useCurrentPage=(path)=> {
-  const currentPage = ref("");
+//all routes and there pages
+const pageMappings = {
+  "/app/admin": "Dashboard",
+  "/app/admin/address": "Region/City",
+  "/app/admin/address/subcity": "Subcity/Zone",
+  "/app/admin/address/woreda": "Woreda/Town",
+  "/app/admin/interventions": "Intervention Types",
+  "/app/admin/interventions/category": "Intervention Category",
+  "/app/admin/support": "Support",
+  "/app/admin/users": "Users",
+};
 
-  if (path === "/app/admin/") {
-    currentPage.value = "Dashboard";
-  } else if (path === "/app/admin/address") {
-    currentPage.value = "Address";
-  } else if (path === "/app/admin/interventions") {
-    currentPage.value = "Interventions";
-  } else if (path === "/app/admin/support") {
-    currentPage.value = "Support";
-  }
-   else if(path === "/app/admin/users") {
-    currentPage.value = "Users";
-  }
-  else if (path === "/app/admin/address/") {
-    currentPage.value = "Region/City";
-  } else if (path === "/app/admin/address/subcity") {
-    currentPage.value = "Subcity/Zone";
-  } else if (path === "/app/admin/address/woreda") {
-    currentPage.value = "Woreda/Town";
-  }  
-  else{
-    ''
+export const updateCurrentPage = (path,currentPage) => {
+  for (const [key, value] of Object.entries(pageMappings)) {
+    if (path === key || path.startsWith(key) && key !== "/app/admin") {
+      currentPage.value = value; 
+    }
+
+  return currentPage
   }
 
- // check the path of the current page
-
-
- 
-
-  return {
-    currentPage,
-  };
-}
+};

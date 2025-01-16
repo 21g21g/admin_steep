@@ -3,7 +3,7 @@ import { ref, onMounted, watch, } from "vue";
 import { useWindowSize } from "@vueuse/core";
 import { useRoute, useRouter } from "vue-router";
 import { useForm } from 'vee-validate';
-
+import {useRouteStore} from "~/stores/RouteStore" 
 
 import {
   Dialog,
@@ -20,12 +20,11 @@ import {
 
 const { width } = useWindowSize();
 const { handleSubmit } = useForm();
-
+const store=useRouteStore()
 
 
 const route = useRoute();
 const router = useRouter();
-const currentPage = ref("");
 console.log(route.path)
 
 const isFocused = ref(false);
@@ -45,7 +44,7 @@ const navigation = [
   {
     id:1,
     name: "Dashboard",
-    href: "/app/admin/",
+    href: "/app/admin",
     title: "Dashboard",
     iconName:"material-symbols:dashboard",
     current: true,
@@ -184,22 +183,23 @@ const navigate=(item)=>{
 }
 
 const handleclick = (value) => {
-  currentPage.value = value;
+  store.updatePage(value)
+
   
 };
 
 
     const updateCurrentPage=(path)=> {
-  if (path === "/app/admin/") {
-    currentPage.value = "Dashboard";
-  } else if (path === "/app/admin/address") {
-    currentPage.value = "Address";
-  } else if (path === "/app/admin/interventions") {
-    currentPage.value = "Interventions";
-  } else if (path === "/app/admin/support") {
-    currentPage.value = "Support";
-  } else {
-    currentPage.value = "Users";
+  if (path === "/app/admin") {
+    store.currentPage = "Dashboard";
+  } else if (path.startsWith("/app/admin/address")) {
+    store.currentPage = "Address";
+  } else if (path.startsWith("/app/admin/interventions")) {
+    store.currentPage = "Interventions";
+  } else if (path.startsWith("/app/admin/support")) {
+    store.currentPage = "Support";
+  } else if(path.startsWith("/app/admin/users")) {
+    store.currentPage = "Users";
   }
   
 }
@@ -456,14 +456,14 @@ onMounted(()=>{
               v-for="item in navigation"
               :key="item.name"
               :to="item.href"
-              @click="handleclick(item.href)"
+              @click="handleclick(item.name)"
               :class="[
-                currentPage === item.name
+                store.currentPage === item.name
                   ? 'bg-gray-900 text-white'
                   : 'text-gray-300  hover:text-white',
                   'rounded-md px-3 py-2 text-sm font-bold',
               ]"
-              :aria-current="currentPage === item.name ? 'page' : undefined"
+              :aria-current="store.currentPage === item.name ? 'page' : undefined"
             >
               {{ item.name }}
             </nuxt-link>
@@ -486,8 +486,8 @@ onMounted(()=>{
 
     <!-- /*                         Static sidebar for DESKTOP                         */ -->
     <div
-      class="hidden lg:fixed mt-16 lg:inset-y-0 lg:flex lg:flex-col "
-      :class="mini ? 'w-20' : 'md:w-60'"
+      class="hidden lg:fixed   mt-16 lg:inset-y-0 lg:flex lg:flex-col "
+      :class="mini ? 'w-24' : 'md:w-[17.5rem]'"
     >
       <!-- Sidebar component, swap this element with another sidebar if you like -->
       <div
@@ -558,9 +558,9 @@ onMounted(()=>{
 
              
               <span v-else class="flex items-center gap-x-3   hover:border-primary   px-6"  :class="[
-                currentPage === item.name
-                  ? 'text-white  border-l-[4px] border-primary pl-1'
-                  : 'text-white pl-1 hover:bg-[#697280] bg-transparent border-transparent  border-l-[4px]',
+                store.currentPage === item.name
+                  ? 'text-white  border-l-[8px] border-primary pl-1'
+                  : 'text-white pl-2 hover:bg-[#697280] bg-transparent border-transparent  border-l-[8px]',
               ]">
                <Icon :name="item.iconName"/> {{ item.name }}
               </span>
@@ -613,7 +613,8 @@ onMounted(()=>{
             <p class="text-secondary ">PROGRAMME</p></div>
             
           </div> -->
-          <img src="/steep_logo.jpg" class="h-12 w-36" alt="no" />
+         <NuxtLink to="/app/admin" @click="()=>store.updatePage('Dashboard')">
+          <img src="/steep_logo.jpg" class="h-12 w-36 sm:ml-14" alt="no" /></NuxtLink> 
           <div class="ml-4 flex items-center md:ml-6">
           
             <div class="flex items-center space-x-4 md:mr-5">
@@ -645,7 +646,7 @@ onMounted(()=>{
                   >
                     <span class="sr-only">Open user menu</span>
                    <div class="border border-primary flex flex-row gap-1 items-center rounded-2xl px-2 py-1">
-                   <p class="text-sm">admin role bridges</p>
+                   <p class="text-sm">admin</p>
                     <div
          
                  class=" bg-primary border z-10  flex w-5 h-5 aspect-square items-center rounded-full py-1"

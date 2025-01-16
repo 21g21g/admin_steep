@@ -6,7 +6,7 @@ export const useRouteStore = defineStore('route', {
             currentPage: ""
         }),
     actions: {
-        updateCurrentPage(value) {
+        updatePage(value) {
             this.currentPage=value
 
        

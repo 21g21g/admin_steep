@@ -104,10 +104,10 @@ const onSubmit = handleSubmit(() => {
 });
 </script>
 <template>
-<div class="flex flex-col lg:flex-row px-2 lg:pl-4 w-full lg:pr-10">   
+<div class="flex flex-col lg:flex-row px-2 lg:pl-9 w-full lg:pr-3">   
      <HModal
       :modelValue="isModalOpen"
-      mainClass="relative px-4 pt-5 pb-6 text-left transition-all transform rounded-lg  overflow-y-auto h-[560px] bg-white w-[100%] md:w-[40rem] shadow-xl sm:my-8 sm:w-full sm:p-9"
+      mainClass="absolute md:top-24 md:top:0 md:relative px-4 pt-5 pb-6 text-left transition-all transform rounded-lg  overflow-y-auto h-[560px] bg-white w-[90%] md:w-[40rem] shadow-xl sm:my-8 sm:w-full sm:p-9"
       @update:modelValue="isModalOpen = $event"
       title="Sample Modal"
       wrapperClass=""
@@ -194,7 +194,7 @@ const onSubmit = handleSubmit(() => {
       </template>
     </HModal>
     <div class="flex flex-row -space-x-4 lg:mt-14 lg:w-1/4">
-    <div class="flex items-center gap-x-3 h-6 hover:border-primary px-6 text-white border-l-[6px] border-primary pl-1"></div>
+    <div class="flex items-center gap-x-3 h-6 hover:border-primary px-6 py-3.5 text-white border-l-[8px] border-primary pl-1"></div>
     <div class="flex flex-row gap-x-4 lg:gap-x-16 w-full lg:w-auto">
       <h1 class="text-[#161344] text-sm 3xl:text-lg">User Management</h1>
       <div class="hidden -mt-24 lg:block border-r h-screen"></div>

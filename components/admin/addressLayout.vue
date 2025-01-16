@@ -1,4 +1,6 @@
 <script setup>
+
+
 const route = useRoute();
 const router = useRouter();
 const currentPage = ref("");
@@ -9,7 +11,7 @@ const navigation = [
   {
     id: 1,
     name: "Region/City",
-    href: "/app/admin/address/",
+    href: "/app/admin/address",
     title: "Region/City",
     current: true,
   },
@@ -32,7 +34,7 @@ const handleclick = (value) => {
 };
 
 const updateCurrentPage = (path) => {
-  if (path === "/app/admin/address/") {
+  if (path === "/app/admin/address") {
     currentPage.value = "Region/City";
   } else if (path === "/app/admin/address/subcity") {
     currentPage.value = "Subcity/Zone";
@@ -43,6 +45,7 @@ const updateCurrentPage = (path) => {
 
 onMounted(() => {
   updateCurrentPage(route.path);
+  
 });
 </script>
 
@@ -50,12 +53,12 @@ onMounted(() => {
   <div class="flex flex-col lg:flex-row lg:gap-6 p-4 lg:p-6 min-h-screen">
     <!-- Sidebar -->
     <div>
-      <div class="flex flex-col lg:w-1/4 rounded-lg p-4">
-        <ul class="space-y-3">
+      <div class="flex flex-col md:ml-4 lg:w-1/4 rounded-lg p-4">
+        <ul class="space-y-3 md:space-y-8">
           <li
             v-for="nav in navigation"
             :key="nav.id"
-            class="group flex items-center p-1"
+            class="group  flex items-center p-1"
           >
             <NuxtLink
               :to="nav.href"
@@ -63,11 +66,11 @@ onMounted(() => {
               class="font-medium w-full"
             >
               <span
-                class="hover:border-primary px-5"
+                class="hover:border-primary py-1 px-5"
                 :class="[
                   currentPage === nav.name
-                    ? 'border-l-[4px] border-primary pl-1'
-                    : 'pl-1 py-1 hover:bg-[#697280] hover:text-slate-100 bg-transparent border-transparent border-l-[4px]',
+                    ? 'border-l-[8px] border-primary pl-1'
+                    : 'pl-1 py-1 hover:bg-[#697280] hover:text-slate-100 bg-transparent border-transparent border-l-[8px]',
                 ]"
               >
                 {{ nav.name }}

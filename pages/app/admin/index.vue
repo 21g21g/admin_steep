@@ -6,7 +6,7 @@ definePageMeta({
 </script>
 
 <template>
-<div class="flex flex-col pb-4 px-4 md:pb-0 md:pl-10 md:pr-3 space-y-8">
+<div class="flex flex-col pb-4 px-4 md:pb-0 md:pl-24 md:pr-3 space-y-8">
   <div class="flex flex-wrap gap-6">
     <AdminCard iconname="heroicons:rectangle-stack-solid" title="Interventions" classes="lg:w-[35%] w-full md:w-[48%]">
       <template #content>

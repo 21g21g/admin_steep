@@ -19,14 +19,13 @@ const subcity = [
   { id: 3, name: "Somaliya", identifier: "sm" }
 ];
 
-const selectedValue = ref(null);
+const selectedValue = ref("Kality");
 
 const onSubmit = handleSubmit(() => {
   console.log('Form submitted');
   const output = {
-    name: fullName.value,
-    email: Email.value,
-    partner: selectedValue.value,
+    woreda: woreda.value,
+    subcity: selectedValue.value,
   };
   console.log(output);
   isModalOpen.value=false
@@ -212,7 +211,7 @@ const headers = ref([
 <template #contents>
     <HModal
       :modelValue="isModalOpen"
-      mainClass="relative px-4 pt-5 pb-6 text-left transition-all transform rounded-lg  overflow-y-auto h-[470px] bg-white w-[100%] md:w-[40rem] shadow-xl sm:my-8 sm:w-full sm:p-9"
+      mainClass="absolute top-36 md:top-0 md:relative px-4 pt-5 pb-6 text-left transition-all transform rounded-lg  overflow-y-auto h-[470px] bg-white w-[90%] md:w-[40rem] shadow-xl sm:my-8  sm:p-9"
       @update:modelValue="isModalOpen = $event"
       title="Sample Modal"
       wrapperClass=""
@@ -229,6 +228,7 @@ const headers = ref([
             type="text"
             name="woreda"
             rules="required"
+             placeholder-style="text-[#7A7A7A] pl-2 text-base"
             inputClass="block w-full text-base mt-4  dark:bg-gray-700 dark:text-gray-300 placeholder-gray-300 dark:placeholder-secondary py-3 transition-all duration-300 rounded-md font-body focus:outline-none border-[1px]  border-gray-300 group-hover:border-gray-500 focus:border-gray-600 focus:ring-gray-600 disabled:bg-gray-100 disabled:cursor-not-allowed "
             >
                 <template #label>
